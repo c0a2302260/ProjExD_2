@@ -55,26 +55,33 @@ def main():
     gameover_flag = False
     gameover_count = 0
     vx, vy = 5, 5
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
             
-        screen.blit(bg_img, [0, 0]) 
-        if kk_rct.colliderect(bb_rct):#こうかとんと爆弾の衝突判定
+        screen.blit(bg_img, [0, 0])
+
+        if kk_rct.colliderect(bb_rct):
+            # こうかとんと爆弾の衝突判定
             gameover_flag = True
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
+
         for k, v in mv_dict.items():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True,True):
+            # こうかとんと壁の衝突判定
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+
         yoko, tate = check_bound(bb_rct)
+        # 爆弾と壁の衝突判定
         if not yoko:
             vx *= -1
         if not tate:
@@ -82,7 +89,8 @@ def main():
         bb_rct.move_ip(vx, vy)
         screen.blit(bb_img, bb_rct)
 
-        if gameover_flag: #ゲームオーバー時の処理
+        if gameover_flag:
+            # ゲームオーバー時の処理
             gameover_count += 1
             screen.blit(gameover_img, [0, 0])
             screen.blit(gameover_txt, gameover_txt_rct)
