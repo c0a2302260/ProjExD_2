@@ -37,7 +37,6 @@ def main():
     kk_sad_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
     gameover_img = pg.Surface((WIDTH, HEIGHT))
     gameover_img.set_alpha(200)
-    pg.draw.rect
 
     fonto = pg.font.Font(None, 80)
     gameover_txt = fonto.render("Game Over", True, (255, 255, 255))
