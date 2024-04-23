@@ -33,6 +33,17 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+
+    kk_sad_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
+    gameover_img = pg.Surface((WIDTH, HEIGHT))
+    gameover_img.set_alpha(200)
+    pg.draw.rect
+
+    fonto = pg.font.Font(None, 80)
+    gameover_txt = fonto.render("Game Over", True, (255, 255, 255))
+    gameover_txt_rct = gameover_txt.get_rect()
+    gameover_txt_rct.center = WIDTH/2, HEIGHT/2
+
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     bb_img = pg.Surface((20, 20))
@@ -42,15 +53,17 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     clock = pg.time.Clock()
     tmr = 0
+    gameover_flag = False
+    gameover_count = 0
     vx, vy = 5, 5
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        if kk_rct.colliderect(bb_rct):#こうかとんと爆弾の衝突判定
-            print("gameover")
-            return
+            
         screen.blit(bg_img, [0, 0]) 
+        if kk_rct.colliderect(bb_rct):#こうかとんと爆弾の衝突判定
+            gameover_flag = True
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -68,8 +81,17 @@ def main():
         if not tate:
             vy *= -1
         bb_rct.move_ip(vx, vy)
-        
         screen.blit(bb_img, bb_rct)
+
+        if gameover_flag: #ゲームオーバー時の処理
+            gameover_count += 1
+            screen.blit(gameover_img, [0, 0])
+            screen.blit(gameover_txt, gameover_txt_rct)
+            screen.blit(kk_sad_img, [WIDTH/2+200, HEIGHT/2-70])
+            screen.blit(kk_sad_img, [WIDTH/2-280, HEIGHT/2-70])
+            if gameover_count > 250:
+                return
+        
         pg.display.update()
         tmr += 1
         clock.tick(50)
