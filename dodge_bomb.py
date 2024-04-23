@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1600, 900
@@ -52,8 +53,6 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     clock = pg.time.Clock()
     tmr = 0
-    gameover_flag = False
-    gameover_count = 0
     vx, vy = 5, 5
 
     while True:
@@ -65,7 +64,13 @@ def main():
 
         if kk_rct.colliderect(bb_rct):
             # こうかとんと爆弾の衝突判定
-            gameover_flag = True
+            screen.blit(gameover_img, [0, 0])
+            screen.blit(gameover_txt, gameover_txt_rct)
+            screen.blit(kk_sad_img, [WIDTH/2+200, HEIGHT/2-70])
+            screen.blit(kk_sad_img, [WIDTH/2-280, HEIGHT/2-70])
+            pg.display.update()
+            time.sleep(5)
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -88,17 +93,6 @@ def main():
             vy *= -1
         bb_rct.move_ip(vx, vy)
         screen.blit(bb_img, bb_rct)
-
-        if gameover_flag:
-            # ゲームオーバー時の処理
-            gameover_count += 1
-            screen.blit(gameover_img, [0, 0])
-            screen.blit(gameover_txt, gameover_txt_rct)
-            screen.blit(kk_sad_img, [WIDTH/2+200, HEIGHT/2-70])
-            screen.blit(kk_sad_img, [WIDTH/2-280, HEIGHT/2-70])
-            if gameover_count > 250:
-                return
-        
         pg.display.update()
         tmr += 1
         clock.tick(50)
